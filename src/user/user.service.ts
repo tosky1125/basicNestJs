@@ -48,7 +48,7 @@ export class UserService {
     } catch (error) {
       throw new ConflictException();
     }
-    return userData;
+    return this.getProfile(user.userId);
   }
 
   async createSitter(userData: SitterDto) {
@@ -67,7 +67,7 @@ export class UserService {
     } catch (error) {
       throw new ConflictException();
     }
-    return userData;
+    return this.getProfile(user.userId);
   }
 
   async addParent(req, userData: ParentAdd) {
