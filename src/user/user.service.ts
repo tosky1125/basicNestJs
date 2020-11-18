@@ -45,10 +45,10 @@ export class UserService {
         { primaryId: user.primaryId },
         { parent: parent },
       );
+      return this.getProfile(user.userId);
     } catch (error) {
       throw new ConflictException();
     }
-    return this.getProfile(user.userId);
   }
 
   async createSitter(userData: SitterDto) {
@@ -64,10 +64,10 @@ export class UserService {
         { primaryId: user.primaryId },
         { sitter },
       );
+      return this.getProfile(user.userId);
     } catch (error) {
       throw new ConflictException();
     }
-    return this.getProfile(user.userId);
   }
 
   async addParent(req, userData: ParentAdd) {
