@@ -7,11 +7,9 @@ import { ParentEntity } from './entities/parent.entity';
 import { SitterEntity } from './entities/sitter.entity';
 
 @Module({
-  imports : [
-    TypeOrmModule.forFeature([UserEntity,ParentEntity, SitterEntity])
-  ],
+  imports: [TypeOrmModule.forFeature([UserEntity, ParentEntity, SitterEntity])],
   controllers: [UserController],
   providers: [UserService],
-  exports : [UserService],
+  exports: [UserService],
 })
 export class UserModule {}

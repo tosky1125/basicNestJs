@@ -1,50 +1,62 @@
-import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { ParentEntity } from "./parent.entity";
-import { SitterEntity } from "./sitter.entity";
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { ParentEntity } from './parent.entity';
+import { SitterEntity } from './sitter.entity';
 import * as bcrypt from 'bcrypt';
-
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Entity()
 export class UserEntity {
   @PrimaryGeneratedColumn()
-  primaryId : number;
+  primaryId: number;
 
   @Column()
-  password : string;
+  password: string;
 
   @Column()
-  userName : string;
+  userName: string;
 
   @Column()
-  dateOfBirth : number;
+  dateOfBirth: number;
 
   @Column()
-  gender : string;
+  gender: string;
 
-  @Column({unique : true})
-  userId : string;
+  @Column({ unique: true })
+  userId: string;
 
   @Column()
-  email : string;
+  email: string;
 
   @OneToOne(() => ParentEntity)
   @JoinColumn({
-    name: 'parentId'
+    name: 'parentId',
   })
   parent: ParentEntity;
 
   @OneToOne(() => SitterEntity)
   @JoinColumn({
-    name: 'sitterId'
+    name: 'sitterId',
   })
   sitter: SitterEntity;
 
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(
+      this.password,
+      parseInt(process.env.SALT_ROUND),
+    );
   }
 
-  comparePassword (password) {
+  comparePassword(password) {
     return bcrypt.compare(password, this.password);
   }
 }

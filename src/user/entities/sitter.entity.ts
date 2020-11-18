@@ -3,11 +3,9 @@ import {
   Entity,
   JoinColumn,
   OneToOne,
-  PrimaryGeneratedColumn
-} from "typeorm";
-import {
-  UserEntity
-} from "./user.entity";
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { UserEntity } from './user.entity';
 
 @Entity()
 export class SitterEntity {
@@ -16,7 +14,7 @@ export class SitterEntity {
 
   @OneToOne(() => UserEntity)
   @JoinColumn({
-    name: 'primaryId'
+    name: 'primaryId',
   })
   primaryId: UserEntity;
 
