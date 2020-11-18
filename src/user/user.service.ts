@@ -85,7 +85,7 @@ export class UserService {
     parent.application = application;
     parent = await this.parentRepository.save(parent);
     await this.userRepository.update({ primaryId: user.primaryId }, { parent });
-    return this.userRepository.find({ primaryId: user.primaryId });
+    return this.findOne(user.userId);
   }
 
   async addSitter(req, userData: SitterAdd) {
@@ -104,42 +104,42 @@ export class UserService {
     sitter.introduction = introduction;
     sitter = await this.sitterRepository.save(sitter);
     await this.userRepository.update({ primaryId: user.primaryId }, { sitter });
-    return this.userRepository.find({ primaryId: user.primaryId });
+    return this.findOne(user.userId);
   }
 
   async changeInfo(req, userData: ChangeDto): Promise<Info> {
     const { user } = req;
-    // try {
-    let newUser = Object.assign(new UserEntity(), { ...user, ...userData });
-    newUser = this.userRepository.create(newUser);
-    await this.userRepository.save(newUser);
-    if ((userData.childAge || userData.application) && user.parent) {
-      const { parent } = user;
-      let { childAge, application } = userData;
-      application = application ? application : parent.application;
-      childAge = childAge ? childAge : parent.childAge;
-      const updateParent = { ...parent, childAge, application };
-      await this.parentRepository.update(
-        { primaryId: user.primaryId },
-        { ...updateParent },
-      );
+    try {
+      let newUser = await this.findOne(user.userId);
+      newUser = Object.assign(new UserEntity(), { ...newUser, ...userData });
+      newUser = this.userRepository.create(newUser);
+      await this.userRepository.save(newUser);
+      if ((userData.childAge || userData.application) && newUser.parent) {
+        const { parent } = newUser;
+        let { childAge, application } = userData;
+        application = application ? application : parent.application;
+        childAge = childAge ? childAge : parent.childAge;
+        const updateParent = { ...parent, childAge, application };
+        await this.parentRepository.update(
+          { primaryId: user.primaryId },
+          { ...updateParent },
+        );
+      }
+      if ((userData.careableAge || userData.introduction) && newUser.sitter) {
+        const { sitter } = newUser;
+        let { careableAge, introduction } = userData;
+        introduction = introduction ? introduction : sitter.introduction;
+        careableAge = careableAge ? careableAge : sitter.careableAge;
+        const updateSitter = { ...sitter, careableAge, introduction };
+        await this.sitterRepository.update(
+          { primaryId: user.primaryId },
+          { ...updateSitter },
+        );
+      }
+      return await this.getProfile(user.userId);
+    } catch (error) {
+      throw new NotAcceptableException();
     }
-    if ((userData.careableAge || userData.introduction) && user.sitter) {
-      const { sitter } = user;
-      let { careableAge, introduction } = userData;
-      introduction = introduction ? introduction : sitter.introduction;
-      careableAge = careableAge ? careableAge : sitter.careableAge;
-      const updateSitter = { ...sitter, careableAge, introduction };
-      await this.sitterRepository.update(
-        { primaryId: user.primaryId },
-        { ...updateSitter },
-      );
-    }
-    newUser = await this.getProfile(user.userId);
-    return newUser;
-    // } catch (error) {
-    throw new NotAcceptableException();
-    // }
   }
   async getProfile(userId: string): Promise<Info> {
     const { password, ...result } = await this.findOne(userId);
