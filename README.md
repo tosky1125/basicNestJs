@@ -51,7 +51,7 @@ $ npm run start
 ```
 
 ## 5. API 문서
-
+### 포트번호는 3000번 으로 열어두었습니다.
 API문서에 맞게 이용하시면 됩니다.
 
 [맘편한세상 과제 테스트 API 문서](https://tosky0514.gitbook.io/apis/)
