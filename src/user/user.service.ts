@@ -85,7 +85,7 @@ export class UserService {
     parent.application = application;
     parent = await this.parentRepository.save(parent);
     await this.userRepository.update({ primaryId: user.primaryId }, { parent });
-    return this.findOne(user.userId);
+    return this.getProfile(user.userId);
   }
 
   async addSitter(req, userData: SitterAdd) {
@@ -104,7 +104,7 @@ export class UserService {
     sitter.introduction = introduction;
     sitter = await this.sitterRepository.save(sitter);
     await this.userRepository.update({ primaryId: user.primaryId }, { sitter });
-    return this.findOne(user.userId);
+    return this.getProfile(user.userId);
   }
 
   async changeInfo(req, userData: ChangeDto): Promise<Info> {
