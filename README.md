@@ -34,6 +34,7 @@ SALT_ROUNT=10
 ```
 
 ```
+e.g.
 DB_PORT=3306 
 DB_HOST=localhost 
 DB_USER=2번에서 입력한 유저명
