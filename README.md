@@ -44,9 +44,3 @@ $ npm run build
 $ npm run start
 ```
 
-## 4. API 문서
-포트번호는 3000번으로 설정 해두었습니다.
-API문서를 확인하시고 호출 해주세요. 
-
-API Docs [맘편한세상 과제 테스트 API 문서](https://tosky0514.gitbook.io/apis/)
-
